@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <script type="text/javascript" src='d3.js'>
+    </script>
+  </head>
+  <body>
+    <svg id='one'>
+    </svg>
+    <svg id='two'>
+    </svg>
+  </body>
+  <script type="text/javascript">
+
+    var width=500;
+    var height=200;
+
+    var draw = function(data,location){
+        var barWidth=width/data.length();
+
+        location.selectAll('rect')
+        .data(data).enter()
+        .append('rect')
+        .attr('x',function(d,i){
+          return {i*barWidth}
+        })
+        .attr('y',function(d){
+          return {height-d.num*5}
+        })
+        .attr('width',barWidth)
+        .attr('height',d.num*5);
+
+    var svg1 = d3.select('#one');
+    var svg2 = d3.select('#two');
+
+    var dcsv = d3.csv("colorData.csv");
+    var djson = d3.json("colorData.json")
+                .then(function(data){
+                  draw(data,svg1);
+                });
+
+    d3.selectAll('svg').attr('width',width).attr('height',height);
+
+
+
+
+
+
+    }
+
+  </script>
+</html>
