@@ -65,25 +65,25 @@
           })
           .attr("r",20);
 
-        d3.select(location).selectAll('circle').append('text')
-          .text("DATA")
-          .attr('x',0)
-          .attr('y',0);
+        // d3.select(location).selectAll('circle').append('text')
+        //   .text("DATA")
+        //   .attr('x',0)
+        //   .attr('y',0);
 
-          // d3.select(location).selectAll('text.circ')
-          //   .data(data).enter()
-          //   .append('text.circ')
-          //   .text(function(d){
-          //     return d.color;
-          //   })
-          //   .attr("class","circ")
-          //   .attr('x',function(d,i){
-          //     return i*barWidth+barWidth/2;
-          //   })
-          //   .attr('y',function(d){
-          //     return height-7;
-          //   })
-          //   .attr('fill','white');
+          d3.select(location).selectAll('text.c')
+            .data(data).enter()
+            .append('text')
+            .text(function(d){
+              return d.color;
+            })
+            .attr("class","circ")
+            .attr('x',function(d,i){
+              return width-i*50-60;
+            })
+            .attr('y',function(d){
+              return 80;
+            })
+            .attr('fill','black');
 
       }
 
