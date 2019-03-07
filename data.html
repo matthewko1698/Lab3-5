@@ -136,12 +136,12 @@
 
 
     // both are read in as objects
-    var dcsv = d3.csv("colorData.csv")
+    var dcsv = d3.csv("https://github.com/matthewko1698/Lab3-5/blob/master/colorData.csv")
                  .then(function(data){
                   console.log(data);
                   draw(data,svg2);
                  });
-    var djson = d3.json("colorData.json")
+    var djson = d3.json("https://github.com/matthewko1698/Lab3-5/blob/master/colorData.json")
                 .then(function(data){
                 console.log(data);
                 draw(data,svg1);
