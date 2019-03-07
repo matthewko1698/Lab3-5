@@ -11,7 +11,7 @@
     </svg>
   </body>
   <script type="text/javascript">
-    var margin=20;
+    var margin = 20;
     var width=500;
     var height=500;
 
@@ -40,10 +40,9 @@
 
     var draw = function(data,location){
         var barWidth=width/data.length;
-        var arr_nums = data.map(function(d){console.log(d.num);return d.num;});
-        var arr_cols = data.map(function(d){return d.color;});
 
-        console.log(arr_nums);
+        //**CHANGES**//
+        var arr = data.map(function(d){return d.color;});
 
         // create scales (2)
         // x scale
@@ -53,10 +52,10 @@
         .paddingInner(0.1);
         // y scale
         var yScale = d3.scaleLinear()
-        .domain(arr_nums)
-        .range([height,.5*height]);
+        .domain(data.map(function(d){return d.num;}))
+        .range([height,0]);
 
-
+        // Displaying Data
         d3.select(location).style("padding",margin)
         .selectAll('rect')
         .data(data).enter()
@@ -65,7 +64,7 @@
           return band(i);
         })
         .attr('y',function(d){
-          return height-d.num*20;
+          return (yScale(15)-d.num*20);
         })
         .attr('width',barWidth)
         .attr('height',function(d){
@@ -73,8 +72,10 @@
         .attr('fill',function(d){
           return d.color
         })
+
         .attr('margin-right',"50"); // does style work on rects?
 
+        // text
         d3.select(location).selectAll('text')
           .data(data).enter()
           .append('text')
@@ -86,10 +87,11 @@
             return band(i)+barWidth/2;
           })
           .attr('y',function(d){
-            return height-7;
+            return yScale(5);
           })
           .attr('fill','white');
 
+          // legend
         d3.select(location).selectAll('circle').data(data).enter()
           .append('circle')
           .attr("fill",function(d){
@@ -103,6 +105,8 @@
           })
           .attr("r",20);
 
+
+          // text
           d3.select(location).selectAll('text.c')
             .data(data).enter()
             .append('text')
@@ -121,21 +125,19 @@
             });
 
             // DEFINE axes (2) //
-            var xAxis = d3.axisBottom(band)
-                          .tickValues(d3.range(data.length))
-
-            var yAxis = d3.axisLeft(yScale)
-                          .tickValues([20,30,40,50]);
+            var xAxis = d3.axisBottom().scale(band);
+            var yAxis = d3.axisLeft().scale(yScale);
 
             // CREATE X AXIS
             d3.select(location).append("g")
             .attr("class","xaxis") // set class for x-axis
-            .attr("transform","translate(0,"+499+")")
+            .attr("transform","translate(0,"+yScale(height)+")")
             .call(xAxis);
             // CREATE Y AXIS
-            d3.select(location).append("g")
-            .attr("class","yaxis")
-            .call(yAxis);
+            // d3.select(location).append("g")
+            // .attr("class","yaxis")
+            //
+            // .call(yAxis);
 
       }
 
