@@ -11,19 +11,55 @@
     </svg>
   </body>
   <script type="text/javascript">
-
+    var margin = 20;
     var width=500;
     var height=500;
+
+    // var xScale = d3.scaleOrdinal()
+    // .domain([d3.min(dataset, function(d) {return d;}), d3.max(dataset, function(d){return d;})] )
+    // .range([0,w]);
+
+    // var xAxis = d3.axisBottom().scale(xScale);
+    // create axis function with its appropriate scale
+    // tickValues([])
+    // tickFomrat()
+
+    // svg.append("g")
+    // .attr("class","x-axis")
+    // .attr("transform","translate(0," + (h) + ")")
+    // .call(xAxis);
+    // append axis function draws to the screen by appending SVG elements to the DOM (hence g)
+    // a g element is a group element; they are invisible
+    //they are used to contain groups of elements
+    //we can apply transformations to g elements
+
+    // call takes an incoming selection, hands the selection off to any function.
+    //call hands of g to the xAxis function
+
+
 
     var draw = function(data,location){
         var barWidth=width/data.length;
 
-        d3.select(location).selectAll('rect')
+        //**CHANGES**//
+        var arr = data.map(function(d){return d.color;});
+        console.log(arr);
+        // create scales (1) //
+        var band = d3.scaleBand() //
+        .domain(arr)
+            // ^ range of possible input values || can specify the  length or the specific array of categories (colors)
+        .range([0,width])
+            // ^ range of possible output values
+        .paddingInner(0.1);
+            // ^ use 5% of each "band" will be used for spacing inbetween bands (bars, bands)
+
+
+        d3.select(location).style("padding",margin)
+        .selectAll('rect')
         .data(data).enter()
         .append('rect')
-
         .attr('x',function(d,i){
-          return i*barWidth;
+          return band(i);
         })
         .attr('y',function(d){
           return height-d.num*20;
@@ -34,8 +70,7 @@
         .attr('fill',function(d){
           return d.color
         })
-
-        .style('margin-right',"10px");
+        .attr('margin-right',"50"); // does style work on rects?
 
         d3.select(location).selectAll('text')
           .data(data).enter()
@@ -45,7 +80,7 @@
           })
           .attr("class","bart")
           .attr('x',function(d,i){
-            return i*barWidth+barWidth/2;
+            return band(i)+barWidth/2;
           })
           .attr('y',function(d){
             return height-7;
@@ -82,27 +117,45 @@
               return d.color;
             });
 
+            // create axes (2) //
+            var xAxis = d3.axisBottom(band)
+                          .tickValues(d3.range(data.length))
+                          .tickFormat(function(d,i) {return d.color;});
+
+
+            d3.select(location).append("g")
+            .attr("class","axis") // set class for x-axis
+            .attr("transform","translate(0,"+499+")")
+            .call(xAxis);
+
+
       }
 
     var svg1 = '#one';
     var svg2 = '#two';
 
+
+    // both are read in as objects
     var dcsv = d3.csv("colorData.csv")
                  .then(function(data){
-                   draw(data,svg2);
+                  console.log(data);
+                  draw(data,svg2);
                  });
     var djson = d3.json("colorData.json")
                 .then(function(data){
-                  // console.log("data",data);
-                  draw(data,svg1);
+                console.log(data);
+                draw(data,svg1);
                 });
+
 
     d3.selectAll('svg').attr('width',width)
                        .attr('height',height)
-                       .style('display','block')
+                       .style('display','inline')
                        .style('margin','20px');
 
-
+// grab each other
+// put them in an arrays
+// use this to set the scale
 
 
 
