@@ -46,7 +46,7 @@
         console.log(arr);
         // create scales (1) //
         var band = d3.scaleBand() //
-        .domain(arr)
+        .domain(d3.range(data.length))
             // ^ range of possible input values || can specify the  length or the specific array of categories (colors)
         .range([0,width])
             // ^ range of possible output values
